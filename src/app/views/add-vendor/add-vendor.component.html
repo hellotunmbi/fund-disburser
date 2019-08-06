@@ -9,7 +9,10 @@
     </div>
     <div class="row">
       <div class="col-md-8 offset-2">
-        <form>
+        <div class="alert alert-primary" role="alert" *ngIf="message.enabled">
+          {{ message.text }}
+        </div>
+        <form method="POST">
           <div class="form-group">
             <label for="inputAddress">Customer Name</label>
             <input
@@ -18,6 +21,8 @@
               id="inputAddress"
               placeholder="customer name"
               name="customer_name"
+              [(ngModel)]="vendor.customer_name"
+              required
             />
           </div>
           <div class="form-group">
@@ -28,16 +33,20 @@
               id="inputAddress2"
               placeholder="name of business"
               name="business_name"
+              [(ngModel)]="vendor.business_name"
+              required
             />
           </div>
           <div class="form-row">
             <div class="form-group col-md-4">
-              <label for="acct_number">Account Number</label>
+              <label for="acct_no">Account Number</label>
               <input
                 type="text"
                 class="form-control"
-                id="acct_number"
-                name="acct_number"
+                id="acct_no"
+                name="acct_no"
+                [(ngModel)]="vendor.acct_no"
+                required
               />
             </div>
             <div class="form-group col-md-4">
@@ -47,11 +56,18 @@
                 class="form-control"
                 id="acct_name"
                 name="acct_name"
+                [(ngModel)]="vendor.acct_name"
+                required
               />
             </div>
             <div class="form-group col-md-4">
               <label for="bank">Bank</label>
-              <select id="bank" class="form-control" name="bank">
+              <select
+                id="bank"
+                class="form-control"
+                name="bank"
+                [(ngModel)]="vendor.bank"
+              >
                 <option selected>Choose...</option>
                 <option value="firstbank">First Bank</option>
                 <option value="gtbank">GTBank</option>
@@ -62,7 +78,14 @@
               </select>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Add Customer</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="addVendor($event)"
+            [disabled]="submitBtn.enabled"
+          >
+            {{ submitBtn.text }}
+          </button>
         </form>
       </div>
     </div>
