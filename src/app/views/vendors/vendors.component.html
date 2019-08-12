@@ -9,40 +9,42 @@
     </div>
     <div class="row">
       <div class="col-md-10 offset-1">
+        <div class="alert alert-primary" role="alert" *ngIf="message.enabled">
+          Transfer Initiated Succesfully: {{ message.text }}
+        </div>
+        <div
+          class="alert alert-danger"
+          role="alert"
+          *ngIf="errorMessage.enabled"
+          [innerHTML]="errorMessage.text"
+        ></div>
         <table class="table" *ngIf="vendors && vendors.length > 0">
           <thead>
             <tr>
               <th scope="col">Vendor Name</th>
               <th scope="col">Business Name</th>
-              <th scope="col">Acct Details</th>
               <th scope="col">Bank</th>
               <th scope="col">Account Number</th>
-              <th scope="col">Pay Vendor</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Delete Vendor</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let vendor of vendors; let i = index">
-              <td scope="row">{{ vendor.customer_name }}</td>
-              <td scope="row">{{ vendor.business_name }}</td>
-              <td>{{ vendor.acct_name }}</td>
-              <td>{{ vendor.bank }}</td>
-              <td>{{ vendor.acct_no }}</td>
+              <td scope="row" class="capitalize">{{ vendor.name }}</td>
+              <td scope="row" class="capitalize">
+                {{ vendor.metadata.business_name }}
+              </td>
+              <td>{{ vendor.details.bank_name }}</td>
+              <td>{{ vendor.details.account_number }}</td>
               <td>
-                <button
-                  class="btn btn-primary"
-                  angular4-paystack
-                  [key]="'pk_test_e90f321d81004cd2a0f56dbdafa493f53a029e0c'"
-                  [email]="'hellotunmbi@gmail.com'"
-                  [amount]="50000"
-                  [ref]="vendor._id"
-                  (close)="paymentCancel()"
-                  (callback)="paymentDone($event)"
-                  *ngIf="!vendor.paid"
-                >
-                  Pay with Paystack
-                </button>
-                <span style="font-size: 16px" *ngIf="vendor.paid"
-                  >Paid To Vendor</span
+                {{ (vendor.metadata.amount / 100).toFixed(2) | currency: "N " }}
+              </td>
+              <td>
+                <a
+                  href="javascript:void(0)"
+                  (click)="deleteVendor(vendor.recipient_code)"
+                  >Delete Vendor</a
                 >
               </td>
             </tr>
@@ -51,9 +53,20 @@
         <div
           class="alert alert-primary"
           role="alert"
-          *ngIf="vendors && vendors.length === 0"
+          *ngIf="vendors && !vendorLoading && vendors.length === 0"
         >
           No vendor has been registered yet.
+        </div>
+        <div *ngIf="vendorLoading">Loading vendors...</div>
+        <div *ngIf="!vendorLoading">
+          <hr />
+          <button
+            class="btn btn-primary"
+            (click)="processAllPayments()"
+            [disabled]="!submitBtn.enabled"
+          >
+            {{ submitBtn.text }}
+          </button>
         </div>
       </div>
     </div>

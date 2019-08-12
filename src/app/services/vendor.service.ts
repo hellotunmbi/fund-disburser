@@ -8,40 +8,52 @@ import { environment } from "./../../environments/environment";
 export class VendorService {
   baseURL = environment.appBaseURL;
   paystackAPI = environment.paystackAPI;
+  bearertoken = environment.PAYSTACK_SECRET_KEY_TEST;
+
+  options = {
+    headers: new HttpHeaders({
+      "Content-Type": "application/json"
+    })
+  };
 
   constructor(public http: HttpClient) {}
 
-  // CREATE NEW VENDOR...
-  createVendor(vendor) {
-    const options = {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json"
-      })
-    };
-
-    return this.http.post(this.baseURL + "vendor", vendor, options);
+  /******************* */
+  // Create Transfer Recipient...
+  addVendor(vendor) {
+    return this.http.post(
+      `${this.paystackAPI}/transferrecipient`,
+      vendor,
+      this.options
+    );
   }
+
+  /******************* */
+  // List All Transfer Recipient...
 
   listVendors() {
-    const options = {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json"
-      })
-    };
-
-    return this.http.get(this.baseURL + "vendor", options);
+    return this.http.get(`${this.paystackAPI}/transferrecipient`, this.options);
   }
 
-  verifyTransaction(ref) {
-    const options = {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json"
-      })
-    };
-
-    return this.http.get(
-      this.paystackAPI + "/transaction/verify/" + ref,
-      options
+  /******************* */
+  // Perform transfer from balance to users bank accounts...
+  processBulkTransfer(transferDetails) {
+    return this.http.post(
+      `${this.paystackAPI}/transfer/bulk`,
+      transferDetails,
+      this.options
     );
+  }
+
+  /******************* */
+  // List All Banks...
+  getBanks() {
+    return this.http.get(`${this.paystackAPI}/bank`);
+  }
+
+  /******************* */
+  // Check admin's balance...
+  checkBalance() {
+    return this.http.get(`${this.paystackAPI}/balance`);
   }
 }

@@ -12,33 +12,42 @@
         <div class="alert alert-primary" role="alert" *ngIf="message.enabled">
           {{ message.text }}
         </div>
+        <div
+          class="alert alert-danger"
+          role="alert"
+          *ngIf="errorMessage.enabled"
+        >
+          Could Not Create Customer: <strong>{{ errorMessage.text }}</strong>
+        </div>
         <form method="POST">
-          <div class="form-group">
-            <label for="inputAddress">Customer Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="inputAddress"
-              placeholder="customer name"
-              name="customer_name"
-              [(ngModel)]="vendor.customer_name"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="inputAddress2">Business Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="inputAddress2"
-              placeholder="name of business"
-              name="business_name"
-              [(ngModel)]="vendor.business_name"
-              required
-            />
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputAddress">Customer Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputAddress"
+                placeholder="customer name"
+                name="customer_name"
+                [(ngModel)]="vendor.customer_name"
+                required
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="inputAddress2">Business Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputAddress2"
+                placeholder="name of business"
+                name="business_name"
+                [(ngModel)]="vendor.business_name"
+                required
+              />
+            </div>
           </div>
           <div class="form-row">
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-4">
               <label for="acct_no">Account Number</label>
               <input
                 type="text"
@@ -49,7 +58,7 @@
                 required
               />
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-4">
               <label for="acct_name">Account Name</label>
               <input
                 type="text"
@@ -60,7 +69,7 @@
                 required
               />
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-4">
               <label for="bank">Bank</label>
               <select
                 id="bank"
@@ -68,19 +77,16 @@
                 name="bank"
                 [(ngModel)]="vendor.bank"
               >
-                <option selected>Choose...</option>
-                <option value="firstbank">First Bank</option>
-                <option value="gtbank">GTBank</option>
-                <option value="fidelity">Fidelity Bank</option>
-                <option value="stanbic">Stanbic IBTC</option>
-                <option value="zenith">Zenith Bank</option>
-                <option value="uba">UBA</option>
+                <option selected disabled>Choose...</option>
+                <option [value]="bank.code" *ngFor="let bank of banksList">
+                  {{ bank.name }}
+                </option>
               </select>
             </div>
-            <div class="form-group col-md-3">
-              <label for="amount">Amount</label>
+            <div class="form-group col-md-4">
+              <label for="amount">Amount to be Paid (N)</label>
               <input
-                type="text"
+                type="number"
                 class="form-control"
                 id="amount"
                 name="amount"
@@ -93,7 +99,7 @@
             type="button"
             class="btn btn-primary"
             (click)="addVendor($event)"
-            [disabled]="submitBtn.enabled"
+            [disabled]="!submitBtn.enabled"
           >
             {{ submitBtn.text }}
           </button>

@@ -1,7 +1,11 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule, HttpHeaders } from "@angular/common/http";
+import {
+  HttpClientModule,
+  HttpHeaders,
+  HTTP_INTERCEPTORS
+} from "@angular/common/http";
 import { Angular4PaystackModule } from "angular4-paystack";
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -15,6 +19,7 @@ import { VendorsComponent } from "./views/vendors/vendors.component";
 import { ProcessPaymentsComponent } from "./views/process-payments/process-payments.component";
 
 import { VendorService } from "./services/vendor.service";
+import TokenInterceptor from "./services/token.interceptor";
 
 @NgModule({
   declarations: [
@@ -34,7 +39,10 @@ import { VendorService } from "./services/vendor.service";
     HttpClientModule,
     Angular4PaystackModule
   ],
-  providers: [VendorService],
+  providers: [
+    VendorService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

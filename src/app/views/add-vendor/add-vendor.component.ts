@@ -7,18 +7,20 @@ import { VendorService } from "../../services/vendor.service";
   styleUrls: ["./add-vendor.component.scss"]
 })
 export class AddVendorComponent implements OnInit {
+  banksList: Array<{}> = [];
+
   vendor = {
     customer_name: "",
     business_name: "",
-    amount: "",
     acct_name: "",
     acct_no: "",
-    bank: ""
+    bank: "",
+    amount: ""
   };
 
   submitBtn = {
     text: "Add Vendor",
-    enabled: false
+    enabled: true
   };
 
   message = {
@@ -26,54 +28,89 @@ export class AddVendorComponent implements OnInit {
     enabled: false
   };
 
-  constructor(private vendorService: VendorService) {}
+  errorMessage = {
+    text: "",
+    enabled: false
+  };
+
+  constructor(private vendorService: VendorService) {
+    this.getBankList();
+  }
 
   ngOnInit() {}
+
+  getBankList() {
+    this.vendorService.getBanks().subscribe(banks => {
+      if (banks["status"]) {
+        this.banksList = banks["data"];
+      } else {
+        console.log("Unable to get Banks");
+      }
+    });
+  }
 
   addVendor() {
     console.log("You clicked me yeah?");
     console.log(this.vendor);
 
+    this.vendor["type"] = "nuban";
+
     //check if fields are empty.
     if (
       !this.vendor.customer_name &&
       !this.vendor.business_name &&
-      !this.vendor.amount &&
       !this.vendor.acct_name &&
       !this.vendor.acct_no &&
-      !this.vendor.bank
+      !this.vendor.bank &&
+      !this.vendor.amount
     ) {
       alert("Some fields are empty");
     } else {
-      this.submitBtn.enabled = true;
+      this.submitBtn.enabled = false;
       this.submitBtn.text = "Adding Vendor...";
 
-      this.vendorService.createVendor(this.vendor).subscribe(data => {
-        if (data["status"] === 200) {
-          console.log(data);
-
-          this.message.enabled = true;
-          this.message.text = data["data"].message;
-
-          console.log(data["data"].message);
-
-          this.submitBtn.enabled = false;
-          this.submitBtn.text = "Add Vendor";
-
-          this.vendor.customer_name = "";
-          this.vendor.business_name = "";
-          this.vendor.amount = "";
-          this.vendor.acct_name = "";
-          this.vendor.acct_no = "";
-          this.vendor.bank = "";
-        } else {
-          this.message.enabled = false;
-          this.message.text = "";
+      const vendorBody = {
+        type: "nuban",
+        name: this.vendor.customer_name,
+        account_number: this.vendor.acct_no,
+        bank_code: this.vendor.bank,
+        metadata: {
+          business_name: this.vendor.business_name,
+          amount: parseInt(this.vendor.amount)
         }
-      });
+      };
+
+      try {
+        this.vendorService.addVendor(vendorBody).subscribe(
+          data => {
+            console.log(data);
+
+            this.submitBtn.enabled = true;
+            this.submitBtn.text = "Add Vendor";
+
+            this.message.enabled = true;
+            this.message.text = data["message"];
+
+            this.clearFields();
+          },
+          error => {
+            console.log(error["error"].message);
+            this.errorMessage.text = error["error"].message;
+            this.errorMessage.enabled = true;
+          }
+        );
+      } catch (err) {
+        console.log("error: " + err);
+      }
     }
-    //If not, disable submit button,
-    //submit to vendor service.
-    //clear fields
+  }
+
+  clearFields() {
+    this.vendor.customer_name = "";
+    this.vendor.business_name = "";
+    this.vendor.acct_name = "";
+    this.vendor.acct_no = "";
+    this.vendor.bank = "";
+    this.vendor.amount = "";
   }
 }
