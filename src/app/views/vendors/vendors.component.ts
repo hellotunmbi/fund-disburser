@@ -19,7 +19,33 @@ export class VendorsComponent implements OnInit {
     this.vendorService.listVendors().subscribe(data => {
       console.log(data);
 
-      this.vendors = data["data"];
+      if (data["status"] === 200) {
+        this.vendors = data["data"];
+      }
     });
+  }
+
+  paymentDone($event) {
+    console.log("DONE");
+    const response = $event;
+
+    if (response.status === "success") {
+      //prompt paid. Send paid status to API to be recorded
+      console.log($event);
+
+      //verify transaction
+      //   this.vendorService.verifyTransaction(response.reference)
+    } else {
+      console.log("UNABLE TO COMPLETE");
+    }
+  }
+
+  paymentCancel() {
+    console.log("Payment Cancelled");
+  }
+
+  generateRef() {
+    const randomRef = Math.floor(Math.random() * Math.floor(100000000));
+    return randomRef;
   }
 }

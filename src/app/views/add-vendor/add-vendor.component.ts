@@ -10,6 +10,7 @@ export class AddVendorComponent implements OnInit {
   vendor = {
     customer_name: "",
     business_name: "",
+    amount: "",
     acct_name: "",
     acct_no: "",
     bank: ""
@@ -37,6 +38,7 @@ export class AddVendorComponent implements OnInit {
     if (
       !this.vendor.customer_name &&
       !this.vendor.business_name &&
+      !this.vendor.amount &&
       !this.vendor.acct_name &&
       !this.vendor.acct_no &&
       !this.vendor.bank
@@ -60,6 +62,7 @@ export class AddVendorComponent implements OnInit {
 
           this.vendor.customer_name = "";
           this.vendor.business_name = "";
+          this.vendor.amount = "";
           this.vendor.acct_name = "";
           this.vendor.acct_no = "";
           this.vendor.bank = "";

@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   //   appBaseURL: "https://fund-disburser-api.herokuapp.com/",
-  appBaseURL: "http://localhost:1000/"
+  appBaseURL: "http://localhost:1000/",
+  paystackAPI: "https://api.paystack.co"
 };
 
 /*

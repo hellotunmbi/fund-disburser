@@ -7,6 +7,8 @@ import { environment } from "./../../environments/environment";
 })
 export class VendorService {
   baseURL = environment.appBaseURL;
+  paystackAPI = environment.paystackAPI;
+
   constructor(public http: HttpClient) {}
 
   // CREATE NEW VENDOR...
@@ -28,5 +30,18 @@ export class VendorService {
     };
 
     return this.http.get(this.baseURL + "vendor", options);
+  }
+
+  verifyTransaction(ref) {
+    const options = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json"
+      })
+    };
+
+    return this.http.get(
+      this.paystackAPI + "/transaction/verify/" + ref,
+      options
+    );
   }
 }
