@@ -76,9 +76,9 @@ export class VendorsComponent implements OnInit {
     );
 
     //If you dont have enough money in your balance...
-    if (totalAmount < this.balance) {
+    if (totalAmount > this.balance) {
       this.errorMessage.text =
-        "You dont have enough money to make this transfer<br/><a href='#'>Fund Your Account</a>";
+        "You dont have enough money to make this transfer<br/>Fund Your Account";
       this.errorMessage.enabled = true;
 
       return;
