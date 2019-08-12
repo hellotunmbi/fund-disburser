@@ -46,7 +46,6 @@ export class VendorsComponent implements OnInit {
     this.vendorService.listVendors().subscribe(
       data => {
         if (data["status"]) {
-          console.log(data);
           this.vendors = data["data"];
           this.vendorLoading = false;
         }
@@ -58,8 +57,6 @@ export class VendorsComponent implements OnInit {
             recipient: singleVendor.recipient_code
           };
         });
-
-        console.log(this.recipientCodes);
       },
       error => {
         console.log(error);
@@ -77,7 +74,6 @@ export class VendorsComponent implements OnInit {
       (total, recipient) => (total += recipient.amount),
       0
     );
-    console.log("total: " + totalAmount);
 
     //If you dont have enough money in your balance...
     if (totalAmount < this.balance) {
@@ -98,8 +94,6 @@ export class VendorsComponent implements OnInit {
     this.vendorService.processBulkTransfer(paymentBody).subscribe(
       data => {
         if (data["status"]) {
-          console.log(data);
-
           this.message.enabled = true;
           this.message.text = data["message"];
 
@@ -119,8 +113,6 @@ export class VendorsComponent implements OnInit {
       this.balance = data["data"][0].balance;
       console.log(data);
     });
-
-    console.log("balance: " + this.balance);
 
     // setTimeout(() => console.log(this.balance), 2000);
   }

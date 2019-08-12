@@ -9,6 +9,9 @@
     </div>
     <div class="row">
       <div class="col-md-6 offset-3">
+        <div class="alert alert-primary" role="alert" *ngIf="message.enabled">
+          {{ message.text }}
+        </div>
         <form>
           <div class="form-group">
             <label for="exampleInputEmail1">Amount to Fund</label>
@@ -18,12 +21,25 @@
               aria-describedby="emailHelp"
               placeholder="Enter amount"
               name="amount"
+              [(ngModel)]="amount"
             />
             <small id="emailHelp" class="form-text text-muted"
               >Enter the amount you'll like to fund.</small
             >
           </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+          <button
+            angular4-paystack
+            [key]="'pk_test_e90f321d81004cd2a0f56dbdafa493f53a029e0c'"
+            [email]="'hellotunmbi@gmail.com'"
+            [amount]="amount * 100"
+            [ref]="ref"
+            (close)="paymentCancel()"
+            (callback)="paymentDone($event)"
+            class="btn btn-primary"
+          >
+            Pay with Paystack
+          </button>
         </form>
       </div>
     </div>
