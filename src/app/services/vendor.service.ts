@@ -56,4 +56,12 @@ export class VendorService {
   checkBalance() {
     return this.http.get(`${this.paystackAPI}/balance`);
   }
+
+  /******************* */
+  // Delete a vendor...
+  deleteVendor(recipientCode) {
+    return this.http.delete(
+      `${this.paystackAPI}/transferrecipient/${recipientCode}`
+    );
+  }
 }

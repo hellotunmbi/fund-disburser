@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col-md-10 offset-1">
         <div class="alert alert-primary" role="alert" *ngIf="message.enabled">
-          Transfer Initiated Succesfully: {{ message.text }}
+          {{ message.text }}
         </div>
         <div
           class="alert alert-danger"
@@ -58,7 +58,7 @@
           No vendor has been registered yet.
         </div>
         <div *ngIf="vendorLoading">Loading vendors...</div>
-        <div *ngIf="!vendorLoading">
+        <div *ngIf="!vendorLoading && vendors.length !== 0">
           <hr />
           <button
             class="btn btn-primary"

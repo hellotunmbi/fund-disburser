@@ -95,7 +95,8 @@ export class VendorsComponent implements OnInit {
       data => {
         if (data["status"]) {
           this.message.enabled = true;
-          this.message.text = data["message"];
+          this.message.text =
+            "Transfer Initiated Succesfully: " + data["message"];
 
           this.submitBtn.text = "Process all payments at once";
           this.submitBtn.enabled = true;
@@ -118,6 +119,22 @@ export class VendorsComponent implements OnInit {
   }
 
   deleteVendor(recipient_code) {
-    console.log("You want to delete a vendor?: " + recipient_code);
+    if (confirm("Are you sure you want to delete this vendor?")) {
+      this.vendorService.deleteVendor(recipient_code).subscribe(
+        data => {
+          if (data["status"]) {
+            this.message.enabled = true;
+            this.message.text = data["message"];
+
+            this.vendors = this.vendors.filter(
+              vendor => vendor["recipient_code"] !== recipient_code
+            );
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    }
   }
 }

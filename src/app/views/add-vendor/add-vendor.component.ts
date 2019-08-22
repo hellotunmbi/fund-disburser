@@ -39,6 +39,7 @@ export class AddVendorComponent implements OnInit {
 
   ngOnInit() {}
 
+  // Retrieve List of Banks...
   getBankList() {
     this.vendorService.getBanks().subscribe(banks => {
       if (banks["status"]) {
@@ -49,6 +50,7 @@ export class AddVendorComponent implements OnInit {
     });
   }
 
+  // Add Vendor - A Transfer Recipient...
   addVendor() {
     console.log("You clicked me yeah?");
     console.log(this.vendor);
@@ -76,7 +78,7 @@ export class AddVendorComponent implements OnInit {
         bank_code: this.vendor.bank,
         metadata: {
           business_name: this.vendor.business_name,
-          amount: parseInt(this.vendor.amount)
+          amount: parseInt(this.vendor.amount + "00")
         }
       };
 
